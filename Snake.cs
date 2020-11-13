@@ -17,6 +17,8 @@ namespace SnakeGame
         public List<SnakePart> TheSnake { get; private set; }
         public Direction Direction { get; set; }
         private Canvas gameAreaCanvas;
+        private SnakeFood snakeFood;
+        private int snakeLength = 2;
 
         public Snake(Canvas gameAreaCanvas)
         {
@@ -36,6 +38,8 @@ namespace SnakeGame
             timer.Interval = TimeSpan.FromSeconds(0.5);
             timer.Tick += this.MoveSnake;
             timer.Start();
+
+            this.snakeFood = new SnakeFood(gameAreaCanvas, this);
         }
 
         private void DrawSnake()
@@ -52,10 +56,13 @@ namespace SnakeGame
         {
             var length = this.TheSnake.Count;
 
-            // remove tail, the last snake part in list
-            SnakePart snakeTail = this.TheSnake[length - 1];
-            this.gameAreaCanvas.Children.Remove(snakeTail.UiElement);
-            this.TheSnake.RemoveAt(length - 1);
+            // remove tail, the last snake part in list, if the snake has eaten a food, then don't remove this.
+            if (this.TheSnake.Count >= this.snakeLength)
+            {
+                SnakePart snakeTail = this.TheSnake[length - 1];
+                this.gameAreaCanvas.Children.Remove(snakeTail.UiElement);
+                this.TheSnake.RemoveAt(length - 1);
+            }
 
             // set snake head to part of body
             SnakePart oldHead = this.TheSnake[0];
@@ -88,6 +95,21 @@ namespace SnakeGame
             this.gameAreaCanvas.Children.Add(newHead.UiElement);
             Canvas.SetTop(newHead.UiElement, newHead.Position.Y * Constants.SquareSize);
             Canvas.SetLeft(newHead.UiElement, newHead.Position.X * Constants.SquareSize);
+
+            this.CheckCollision();
+        }
+
+        private void CheckCollision()
+        {
+            var snakePositionX = this.TheSnake[0].Position.X;
+            var snakePositionY = this.TheSnake[0].Position.Y;
+
+            // Collided with food
+            if (snakePositionX == this.snakeFood.Position.X && snakePositionY == this.snakeFood.Position.Y)
+            {
+                this.snakeFood.GenerateNewSnakeFood();
+                this.snakeLength++;
+            }
         }
     }
 

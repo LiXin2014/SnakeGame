@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -11,6 +12,8 @@ namespace SnakeGame
     /// </summary>
     public partial class MainWindow : Window
     {
+        private Snake snake;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -24,7 +27,7 @@ namespace SnakeGame
         private void Window_ContentRendered(object sender, EventArgs e)
         {
             DrawGameArea();
-            Snake snake = new Snake(GameArea);
+            this.snake = new Snake(GameArea);
         }
 
         private void DrawGameArea()
@@ -58,6 +61,26 @@ namespace SnakeGame
                     break;
                 }
                 next++;
+            }
+        }
+
+        private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == Key.Up)
+            {
+                this.snake.Direction = Direction.Up;
+            }
+            else if (e.Key == Key.Down)
+            {
+                this.snake.Direction = Direction.Down;
+            }
+            else if (e.Key == Key.Left)
+            {
+                this.snake.Direction = Direction.Left;
+            }
+            else if (e.Key == Key.Right)
+            {
+                this.snake.Direction = Direction.Right;
             }
         }
     }
