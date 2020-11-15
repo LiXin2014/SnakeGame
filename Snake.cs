@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -112,7 +113,8 @@ namespace SnakeGame
                 this.EndGame();
             }
 
-            foreach (var snakePart in this.TheSnake)
+            // Collided with self. Check the head position with other snake parts.
+            foreach (var snakePart in this.TheSnake.Skip(1))
             {
                 if (snakePositionX == snakePart.Position.X && snakePositionY == snakePart.Position.Y)
                 {
