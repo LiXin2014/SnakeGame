@@ -58,6 +58,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Snake.cs" />
     <Compile Include="SnakeFood.cs" />
+    <Compile Include="GameState.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

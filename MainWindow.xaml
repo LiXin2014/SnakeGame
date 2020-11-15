@@ -7,7 +7,8 @@
         mc:Ignorable="d"
         Title="SnakeWPF - Score: 0" SizeToContent="WidthAndHeight" 
         ContentRendered="Window_ContentRendered"
-        KeyDown="Window_KeyDown">
+        KeyDown="Window_KeyDown"
+        ResizeMode="NoResize">
     <Border BorderBrush="Black" BorderThickness="5">
         <Canvas x:Name="GameArea" Grid.Column="0" Background="Gray" Height="600" Width="600">
 

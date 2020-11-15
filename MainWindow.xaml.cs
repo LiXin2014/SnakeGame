@@ -12,7 +12,7 @@ namespace SnakeGame
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Snake snake;
+        private GameState game;
 
         public MainWindow()
         {
@@ -27,7 +27,7 @@ namespace SnakeGame
         private void Window_ContentRendered(object sender, EventArgs e)
         {
             DrawGameArea();
-            this.snake = new Snake(GameArea);
+            this.game = new GameState(GameArea);
         }
 
         private void DrawGameArea()
@@ -68,19 +68,19 @@ namespace SnakeGame
         {
             if (e.Key == Key.Up)
             {
-                this.snake.Direction = Direction.Up;
+                this.game.Snake.Direction = Direction.Up;
             }
             else if (e.Key == Key.Down)
             {
-                this.snake.Direction = Direction.Down;
+                this.game.Snake.Direction = Direction.Down;
             }
             else if (e.Key == Key.Left)
             {
-                this.snake.Direction = Direction.Left;
+                this.game.Snake.Direction = Direction.Left;
             }
             else if (e.Key == Key.Right)
             {
-                this.snake.Direction = Direction.Right;
+                this.game.Snake.Direction = Direction.Right;
             }
         }
     }

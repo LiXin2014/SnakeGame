@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Media.Converters;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
@@ -19,12 +15,14 @@ namespace SnakeGame
         private Canvas gameAreaCanvas;
         private SnakeFood snakeFood;
         private int snakeLength = 2;
+        private DispatcherTimer timer;
 
-        public Snake(Canvas gameAreaCanvas)
+        public Snake(Canvas gameAreaCanvas, DispatcherTimer timer)
         {
             this.TheSnake = new List<SnakePart>();
             this.Direction = Direction.Right;
             this.gameAreaCanvas = gameAreaCanvas;
+            this.timer = timer;
 
             // Initialize the snake with two snake parts. One head and one body
             SnakePart head = new SnakePart(4, 15, true);
@@ -33,12 +31,8 @@ namespace SnakeGame
             this.TheSnake.Add(body);
 
             this.DrawSnake();
-
-            DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(0.5);
+           
             timer.Tick += this.MoveSnake;
-            timer.Start();
-
             this.snakeFood = new SnakeFood(gameAreaCanvas, this);
         }
 
@@ -109,7 +103,28 @@ namespace SnakeGame
             {
                 this.snakeFood.GenerateNewSnakeFood();
                 this.snakeLength++;
+                GameState.Score++;
             }
+
+            // Collided with wall
+            if (snakePositionX < 0 || snakePositionX > gameAreaCanvas.ActualWidth || snakePositionY < 0 || snakePositionY > gameAreaCanvas.ActualHeight)
+            {
+                this.EndGame();
+            }
+
+            foreach (var snakePart in this.TheSnake)
+            {
+                if (snakePositionX == snakePart.Position.X && snakePositionY == snakePart.Position.Y)
+                {
+                    this.EndGame();
+                }
+            }
+        }
+
+        private void EndGame()
+        {
+            this.timer.IsEnabled = false;
+            MessageBox.Show("Oooops, you died!\n\nTo start a new game, just press the Space bar...", "SnakeWPF");
         }
     }
 
